@@ -1,101 +1,100 @@
 def solution(dartResult):
     answer = 0
-
-    score_list = [[] for _ in range(3)]
-    idx = 0
-    for i in range(len(dartResult)):
-        if dartResult[i] in ['S', 'D', 'T'] and i != len(dartResult) - 1:
-            if dartResult[i + 1] in ['*', '#']:
-                if dartResult[i - 1] == '0' and dartResult[i - 2] == '1':
-                    score_list[idx].append(dartResult[i - 2: i])
-                    score_list[idx].append(dartResult[i: i + 1])
-                    score_list[idx].append(dartResult[i + 1: i + 2])
-                    idx += 1
-                else:
-                    score_list[idx].append(dartResult[i - 1: i])
-                    score_list[idx].append(dartResult[i: i + 1])
-                    score_list[idx].append(dartResult[i + 1: i + 2])
-                    idx += 1
-            else:
-                if dartResult[i - 1] == '0' and dartResult[i - 2] == '1':
-                    score_list[idx].append(dartResult[i - 2: i])
-                    score_list[idx].append(dartResult[i: i + 1])
-                    idx += 1
-                else:
-                    score_list[idx].append(dartResult[i - 1: i])
-                    score_list[idx].append(dartResult[i: i + 1])
-                    idx += 1
-        elif dartResult[i] in ['S', 'D', 'T'] and i == len(dartResult) - 1:
-            if dartResult[i - 1] == '0' and dartResult[i - 2] == '1':
-                score_list[idx].append(dartResult[i - 2: i])
-                score_list[idx].append(dartResult[i: i + 1])
-                idx += 1
-            else:
-                score_list[idx].append(dartResult[i - 1: i])
-                score_list[idx].append(dartResult[i: i + 1])
-                idx += 1
-            break
-
-    print(score_list)
-
+    temp = 0
     last = 0
-    for i in range(len(score_list)):
-        if score_list[i][-1] == '*':
-            if i != 2 and score_list[i + 1][-1] == '*':
-                if score_list[i][1] == 'S':
-                    last += int(score_list[i][0]) * 2
-                elif score_list[i][1] == 'D':
-                    last += int(score_list[i][0]) ** 2 * 2
-                elif score_list[i][1] == 'T':
-                    last += int(score_list[i][0]) ** 3 * 2
-            elif i != 2 and score_list[i + 1][-1] != '*':
-                if score_list[i][1] == 'S':
-                    last += int(score_list[i][0])
-                elif score_list[i][1] == 'D':
-                    last += int(score_list[i][0]) ** 2
-                elif score_list[i][1] == 'T':
-                    last += int(score_list[i][0]) ** 3
-                answer += last * 2
-                last = 0
-            elif i == 2:
-                if score_list[i][1] == 'S':
-                    last += int(score_list[i][0])
-                elif score_list[i][1] == 'D':
-                    last += int(score_list[i][0]) ** 2
-                elif score_list[i][1] == 'T':
-                    last += int(score_list[i][0]) ** 3
-                answer += last * 2
-                last = 0
 
-        elif score_list[i][-1] == '#':
-            if i != 2 and score_list[i + 1][-1] == '*':
-                if score_list[i][1] == 'S':
-                    last += int(score_list[i][0]) * -1
-                elif score_list[i][1] == 'D':
-                    last += int(score_list[i][0]) ** 2 * -1
-                elif score_list[i][1] == 'T':
-                    last += int(score_list[i][0]) ** 3 * -1
+    for i in range(len(dartResult)):
+        if dartResult[i] == '1':
+            if dartResult[i + 1] == '0':
+                if dartResult[i + 2] == 'S':
+                    temp += 10
+                    if i < len(dartResult) - 3:
+                        if dartResult[i + 2] != '*' and dartResult[i + 2] != '#':
+                            answer += temp
+                            last = temp
+                            temp = 0
+                    else:
+                        answer += temp
+                        last = temp
+                        temp = 0
+                elif dartResult[i + 2] == 'D':
+                    temp += 10 ** 2
+                    if i < len(dartResult) - 3:
+                        if dartResult[i + 2] != '*' and dartResult[i + 2] != '#':
+                            answer += temp
+                            last = temp
+                            temp = 0
+                    else:
+                        answer += temp
+                        last = temp
+                        temp = 0
+                elif dartResult[i + 2] == 'T':
+                    temp += 10 ** 3
+                    if i < len(dartResult) - 3:
+                        if dartResult[i + 2] != '*' and dartResult[i + 2] != '#':
+                            answer += temp
+                            last = temp
+                            temp = 0
+                    else:
+                        answer += temp
+                        last = temp
+                        temp = 0
             else:
-                if score_list[i][1] == 'S':
-                    answer += int(score_list[i][0]) * -1
-                elif score_list[i][1] == 'D':
-                    answer += int(score_list[i][0]) ** 2 * -1
-                elif score_list[i][1] == 'T':
-                    answer += int(score_list[i][0]) ** 3 * -1
-        else:
-            if i != 2 and score_list[i + 1][-1] == '*':
-                if score_list[i][1] == 'S':
-                    last += int(score_list[i][0])
-                elif score_list[i][1] == 'D':
-                    last += int(score_list[i][0]) ** 2
-                elif score_list[i][1] == 'T':
-                    last += int(score_list[i][0]) ** 3
-            else:
-                if score_list[i][1] == 'S':
-                    answer += int(score_list[i][0])
-                elif score_list[i][1] == 'D':
-                    answer += int(score_list[i][0]) ** 2
-                elif score_list[i][1] == 'T':
-                    answer += int(score_list[i][0]) ** 3
+                temp += 1
+                if i < len(dartResult) - 2:
+                    if dartResult[i + 2] != '*' and dartResult[i + 2] != '#':
+                        answer += temp
+                        last = temp
+                        temp = 0
+                else:
+                    answer += temp
+                    last = temp
+                    temp = 0
+
+        elif dartResult[i] in ['2', '3', '4', '5', '6', '7', '8', '9']:
+            if dartResult[i + 1] == 'S':
+                temp += int(dartResult[i]) ** 1
+                if i < len(dartResult) - 2:
+                    if dartResult[i + 2] != '*' and dartResult[i + 2] != '#':
+                        answer += temp
+                        last = temp
+                        temp = 0
+                else:
+                    answer += temp
+                    last = temp
+                    temp = 0
+            elif dartResult[i + 1] == 'D':
+                temp += int(dartResult[i]) ** 2
+                if i < len(dartResult) - 2:
+                    if dartResult[i + 2] != '*' and dartResult[i + 2] != '#':
+                        answer += temp
+                        last = temp
+                        temp = 0
+                else:
+                    answer += temp
+                    last = temp
+                    temp = 0
+            elif dartResult[i + 1] == 'T':
+                temp += int(dartResult[i]) ** 3
+                if i < len(dartResult) - 2:
+                    if dartResult[i + 2] != '*' and dartResult[i + 2] != '#':
+                        answer += temp
+                        last = temp
+                        temp = 0
+                else:
+                    answer += temp
+                    last = temp
+                    temp = 0
+
+        if dartResult[i] == '*':
+            last += temp
+            last *= 2
+            answer += last
+            answer -= last
+            temp = 0
+
+        if dartResult[i] == '#':
+            answer += -temp
+            temp = 0
 
     return answer
